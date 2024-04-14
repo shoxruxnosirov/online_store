@@ -61,6 +61,9 @@ const serverListinFunction = (req, res) => {
 
         } else if (req.method === 'POST') {
 
+            res.statusCode = 201;
+            res.setHeader('Content-Type', 'application/json');
+
             req.on('data', (data) => {
 
                 const dataObj = JSON.parse(data.toString());
@@ -81,6 +84,9 @@ const serverListinFunction = (req, res) => {
 
         } else if (req.method === 'PUT') {
 
+            res.statusCode = 201;
+            res.setHeader('Content-Type', 'application/json');
+
             req.on('data', (data) => {
 
                 const dataObj = JSON.parse(data.toString());
@@ -100,7 +106,10 @@ const serverListinFunction = (req, res) => {
             });
 
         } else if (req.method === 'DELETE') {
-            
+
+            res.statusCode = 209;
+            res.setHeader('Content-Type', 'application/json');
+
             req.on('data', (data) => {
             
                 const dataObj = JSON.parse(data.toString());
