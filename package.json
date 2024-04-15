@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "shoxrux",
   "license": "ISC",
   "dependencies": {
     "mysql": "^2.18.1"
