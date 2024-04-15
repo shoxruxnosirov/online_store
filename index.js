@@ -17,7 +17,7 @@ const serverListinFunction = (req, res) => {
     
     } else {
         res.statusCode = 404;
-        res.end('not if blok!');
+        res.end('not found!');
     }
 
     function func(tableName) {
