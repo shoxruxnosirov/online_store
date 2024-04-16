@@ -1,12 +1,12 @@
 {
   "name": "online_store",
   "version": "1.0.0",
-  "description": "",
+  "description": "online_store",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": ["online_store", "online_market"],
   "author": "shoxrux",
   "license": "ISC",
   "dependencies": {
