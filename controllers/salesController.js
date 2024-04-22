@@ -1,4 +1,4 @@
-const workingMysql = require('../workingMysql');
+const workingMysql = require('../service/workingMysql');
 
 class salesController {
     constructor() {

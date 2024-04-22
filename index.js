@@ -1,4 +1,4 @@
-const workingMysql = require('./workingMysql');
+const workingMysql = require('./service/workingMysql');
 const express = require('express');
 const bodyParser = require('body-parser');
 const categoriesController = require('./controllers/categoriesController');
@@ -51,6 +51,7 @@ app.post('/categories', salesController.create);
 app.put('/categories/:id', salesController.update);
 
 app.delete('/categories/:id', salesController.delete);
+
 
 // warehouse
 

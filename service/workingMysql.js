@@ -14,12 +14,14 @@ module.exports = {
     },
 
     getAll: async function (table) {
-        return db(table).select('*');
+        return db(table)
+            .select('*');
     },
 
     getById: async function (table, id) {
-        return db(table).where({ id });
-        return db.select('*').from(table).where({id});
+        return db(table)
+            .where({ id });
+        // return db.select('*').from(table).where({id});
     },
 
     deleteData: async function (table, objData) {
