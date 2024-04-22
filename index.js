@@ -1,143 +1,75 @@
-const http = require('http');
+const express = require('express');
+const bodyParser = require('body-parser');
 const workingMysql = require('./workingMysql');
+
+
+const app = express();
+
+app.use(bodyParser.json());
 
 workingMysql.connectToDb();
 
-const arrTables = ['categories', 'products', 'sales', 'warehouse'];
 
-const serverListinFunction = (req, res) => {
-    
-    const items = req.url.split('/');
-    console.log('method: ', req.method,'   req.url: ', req.url);
-    console.log(items);
-    
-    if( arrTables.includes(items[1]) ) {
-        
-        func(items[1]);
-    
-    } else {
-        res.statusCode = 404;
-        res.end('not found!');
-    }
+// categories
 
-    function func(tableName) {
+app.get('/categories', (req, res) => {
+    workingMysql.getAll('categories')
+      .then(categories => res.status(200).json(categories))
+      .catch(err => res.status(500).json({ message: 'Failed to fetch users', error: err }));
+  });
 
-        if (req.method === 'GET') {
-
-            res.statusCode = 200;
-            res.setHeader('Content-Type', 'application/json');
-
-            if (items.length === 3) {
-
-                const categoryIndex = Number(items[2]);
-
-                workingMysql.getDataFromDbById(tableName, categoryIndex, (error, result) => {
-
-                    if (error) {
-                        console.log(error);
-                        throw error;
-                    } else {
-                        console.log(result[0]);                 // ********************************************
-                        res.end(JSON.stringify(result[0]));
-                    }
-
-                });
-
+  app.get('/categories/:id', (req, res) => {
+    const { id } = req.params;
+    workingMysql.getById('categories', id)
+      .then(user => {
+            if (user.length) {
+                res.status(200).json(user[0]);
             } else {
-
-                workingMysql.getDataFromDb(tableName, (error, result) => {
-
-                    if (error) {
-                        console.log(error);
-                        throw error;
-                    } else {
-                        console.log(result);                   // *****************************************************
-                        res.end(JSON.stringify(result));
-                    }
-
-                });
-
+                res.status(404).json({ message: 'User not found' });
             }
+      })
+      .catch(err => res.status(500).json({ message: 'Failed to fetch user', error: err }));
+  })
 
-        } else if (req.method === 'POST') {
+app.post('/categories', (req, res) => {
+    workingMysql.addToDb('categories', req.body)
+      .then((data) => res.status(201).json({id: data[0]}))
+      .catch(err => res.status(500).json({ message: 'Failed to create user', error: err }));
+  });
 
-            res.statusCode = 201;
-            res.setHeader('Content-Type', 'application/json');
+//   app.put('/categories')
+  app.put('/categories/:id', (req, res) => {
+    const obj = { id: req.params.id };
+    Object.assign(obj, req.body);
+    console.log('obj: ', obj);
+    workingMysql.updateData('categories', obj)
+      .then(updated => {
+            if (updated) {
+                res.status(200).json({ updated });
+            } else {
+                res.status(404).json({ message: 'User not found' });
+            }
+      })
+      .catch(err => res.status(500).json({ message: 'Failed to update user', error: err }));
+  });
 
-            req.on('data', (data) => {
+  app.delete('/categories/:id', (req, res) => {
+    const obj = { id: req.params };
+    Object.assign(obj, req.body);
+    console.log('obj: ',obj);
+    workingMysql.deleteData('categories', obj)
+      .then(deleted => {
+            if (deleted) {
+                res.status(200).json({ deleted });
+            } else {
+                res.status(404).json({ message: 'User not found' });
+            }
+      })
+      .catch(err => res.status(500).json({ message: 'Failed to delete user', error: err }));
+  });
 
-                const dataObj = JSON.parse(data.toString());
 
-                workingMysql.addToDb(tableName, dataObj, (error, result) => {
 
-                    if (error) {
-                        console.log(error);
-                        throw error;
-                    } else {
-                        console.log('New data added:', result.insertId); // ********************************************
-                        res.end(JSON.stringify(result));
-                    }
 
-                });
-
-            });
-
-        } else if (req.method === 'PUT') {
-
-            res.statusCode = 201;
-            res.setHeader('Content-Type', 'application/json');
-
-            req.on('data', (data) => {
-
-                const dataObj = JSON.parse(data.toString());
-                
-                workingMysql.updateData(tableName, dataObj, (error, result) => {
-
-                    if (error) {
-                        console.log(error);
-                        throw error;
-                    } else {
-                        console.log('Data updated:', result.affectedRows); // ****************************************
-                        res.end(JSON.stringify(result));
-                    }
-
-                });
-
-            });
-
-        } else if (req.method === 'DELETE') {
-
-            res.statusCode = 209;
-            res.setHeader('Content-Type', 'application/json');
-
-            req.on('data', (data) => {
-            
-                const dataObj = JSON.parse(data.toString());
-
-                workingMysql.deleteData(tableName, dataObj, (error, result) => {
-            
-                    if (error) {
-                        console.log(error);
-                        throw error;
-                    } else {
-                        console.log('Data deleted:', result.affectedRows);  // *****************************************
-                        res.end(JSON.stringify(result));
-                    }
-            
-                });
-            
-            });
-        }
-    }
-
-}
-
-const httpserver = http.createServer();//serverListinFunction);
-
-httpserver.on('request', serverListinFunction);
-
-// httpserver.on('connection', connection => {
-//     console.log('someone just connected!');
-// });
-
-httpserver.listen(8000, () => console.log('listing on port 8000'));
+const PORT = process.env.PORT || 8000;
+app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
