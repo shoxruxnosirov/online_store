@@ -1,6 +1,10 @@
+const workingMysql = require('./workingMysql');
 const express = require('express');
 const bodyParser = require('body-parser');
-const workingMysql = require('./workingMysql');
+const categoriesController = require('./controllers/categoriesController');
+const productsController = require('./controllers/productsController');
+const salesController = require('./controllers/salesController');
+const warehouseController = require('./controllers/warehouseController');
 
 
 const app = express();
@@ -12,63 +16,53 @@ workingMysql.connectToDb();
 
 // categories
 
-app.get('/categories', (req, res) => {
-    workingMysql.getAll('categories')
-      .then(categories => res.status(200).json(categories))
-      .catch(err => res.status(500).json({ message: 'Failed to fetch users', error: err }));
-  });
+app.get('/categories', categoriesController.getAll);
 
-  app.get('/categories/:id', (req, res) => {
-    const { id } = req.params;
-    workingMysql.getById('categories', id)
-      .then(user => {
-            if (user.length) {
-                res.status(200).json(user[0]);
-            } else {
-                res.status(404).json({ message: 'User not found' });
-            }
-      })
-      .catch(err => res.status(500).json({ message: 'Failed to fetch user', error: err }));
-  })
+app.get('/categories/:id', categoriesController.getById);
 
-app.post('/categories', (req, res) => {
-    workingMysql.addToDb('categories', req.body)
-      .then((data) => res.status(201).json({id: data[0]}))
-      .catch(err => res.status(500).json({ message: 'Failed to create user', error: err }));
-  });
+app.post('/categories', categoriesController.create);
 
-//   app.put('/categories')
-  app.put('/categories/:id', (req, res) => {
-    const obj = { id: req.params.id };
-    Object.assign(obj, req.body);
-    console.log('obj: ', obj);
-    workingMysql.updateData('categories', obj)
-      .then(updated => {
-            if (updated) {
-                res.status(200).json({ updated });
-            } else {
-                res.status(404).json({ message: 'User not found' });
-            }
-      })
-      .catch(err => res.status(500).json({ message: 'Failed to update user', error: err }));
-  });
+app.put('/categories/:id', categoriesController.update);
 
-  app.delete('/categories/:id', (req, res) => {
-    const obj = { id: req.params };
-    Object.assign(obj, req.body);
-    console.log('obj: ',obj);
-    workingMysql.deleteData('categories', obj)
-      .then(deleted => {
-            if (deleted) {
-                res.status(200).json({ deleted });
-            } else {
-                res.status(404).json({ message: 'User not found' });
-            }
-      })
-      .catch(err => res.status(500).json({ message: 'Failed to delete user', error: err }));
-  });
+app.delete('/categories/:id', categoriesController.delete);
 
 
+// products 
+
+app.get('/categories', productsController.getAll);
+
+app.get('/categories/:id', productsController.getById);
+
+app.post('/categories', productsController.create);
+
+app.put('/categories/:id', productsController.update);
+
+app.delete('/categories/:id', productsController.delete);
+
+
+// sales 
+
+app.get('/categories', salesController.getAll);
+
+app.get('/categories/:id', salesController.getById);
+
+app.post('/categories', salesController.create);
+
+app.put('/categories/:id', salesController.update);
+
+app.delete('/categories/:id', salesController.delete);
+
+// warehouse
+
+app.get('/categories', warehouseController.getAll);
+
+app.get('/categories/:id', warehouseController.getById);
+
+app.post('/categories', warehouseController.create);
+
+app.put('/categories/:id', warehouseController.update);
+
+app.delete('/categories/:id', warehouseController.delete);
 
 
 const PORT = process.env.PORT || 8000;
