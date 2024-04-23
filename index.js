@@ -1,6 +1,7 @@
 const workingMysql = require('./service/workingMysql');
 const express = require('express');
 const bodyParser = require('body-parser');
+
 const categoriesController = require('./controllers/categoriesController');
 const productsController = require('./controllers/productsController');
 const salesController = require('./controllers/salesController');
@@ -12,6 +13,10 @@ const app = express();
 app.use(bodyParser.json());
 
 workingMysql.connectToDb();
+
+// login
+
+
 
 
 // categories
