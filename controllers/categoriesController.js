@@ -9,7 +9,7 @@ class categoriesController {
             const data = await workingMysql.getAll(tableName);
             res.status(200).json(data);
         } catch (err) {
-            res.status(500).json({ message: 'Failed to fetch users', error: err })
+            res.status(500).json({ message: 'Failed to fetch categories', error: err })
         }
     };
 
@@ -20,10 +20,10 @@ class categoriesController {
             if (data.length) {
                 res.status(200).json(data[0]);
             } else {
-                res.status(404).json({ message: 'User not found' });
+                res.status(404).json({ message: 'Category not found' });
             }
         } catch (err) {
-            res.status(500).json({ message: 'Failed to fetch user', error: err })
+            res.status(500).json({ message: 'Failed to fetch category', error: err })
         }
     };
 
@@ -32,7 +32,7 @@ class categoriesController {
             const data = await workingMysql.addToDb(tableName, req.body);
             res.status(201).json({ id: data[0] });
         } catch (err) {
-            res.status(500).json({ message: 'Failed to create user', error: err })
+            res.status(500).json({ message: 'Failed to create category', error: err })
         }
     };
 
@@ -43,7 +43,7 @@ class categoriesController {
             const updated = await workingMysql.updateData(tableName, obj);
             res.status(200).json({ updated });
         } catch (err) {
-            res.status(500).json({ message: 'Failed to update user', error: err });
+            res.status(500).json({ message: 'Failed to update category', error: err });
         }
     }
 
@@ -55,10 +55,10 @@ class categoriesController {
             if (deleted) {
                 res.status(200).json({ deleted });
             } else {
-                res.status(404).json({ message: 'User not found' });
+                res.status(404).json({ message: 'Category not found' });
             }
         } catch (err) {
-            res.status(500).json({ message: 'Failed to delete user', error: err })
+            res.status(500).json({ message: 'Failed to delete category', error: err })
         }
     }
 }
