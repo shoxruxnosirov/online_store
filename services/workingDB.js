@@ -1,9 +1,11 @@
 const knex_connect = require('./knexfile');
 const knex = require('knex');
 
-let db;
+let db = knex(knex_connect);
 
 module.exports = {
+
+    db,
 
     connectToDb: function () {
         db = knex(knex_connect); // connection.connect();
@@ -24,6 +26,11 @@ module.exports = {
         // return db.select('*').from(table).where({id});
     },
 
+    getByField: async function (table, objData) {
+        return db(table)
+            .where(objData);
+    },
+
     deleteData: async function (table, objData) {
         return db(table)
             .where({id: objData.id})
@@ -36,7 +43,7 @@ module.exports = {
             .update(dataObj);
     },
 
-    addToDb: async function (table, dataObj) {
+    createData: async function (table, dataObj) {
         return db(table)
             .insert(dataObj);
     }
