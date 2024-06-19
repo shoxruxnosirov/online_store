@@ -1,21 +1,19 @@
 const jwt = require('jsonwebtoken');
-const workingDb = require('../services/workingDB');
+const workingDb = require('../services/db');
 
 module.exports = {
-    requireToken(req, res, next) {
+    async requireToken(req, res, next) {
         const token = req.cookies.jwt;
         if (token) {
-            jwt.verify(token, 'jwt secret', (err, decodedToken) => {
-                if (!err) {
-                    console.log(decodedToken);
-                    next();
-                }
-                else {
-                    console.log(err.message);
-                    // res.redirect('/login');
-                    res.send('tizimda ro\'yxatdan o\'t');
-                }
-            })
+            try {
+                const decodedToken = await jwt.verify(token, 'jwt secret');
+                console.log(decodedToken);
+                next();
+            } catch (err) {
+                console.log(err.message);
+                // res.redirect('/login');
+                res.send('tizimda ro\'yxatdan o\'t');
+            }
         }
         else {
             // res.redirect('/login');
@@ -23,30 +21,20 @@ module.exports = {
         }
     },
 
-    checkUser(req, res, next) {
+    async checkUser(req, res, next) {
         const token = req.cookies.jwt;
         if (token) {
-            jwt.verify(token, 'jwt secret', (err, decodedToken) => {
-                if (!err) {
-                    console.log(decodedToken);
-                    workingDb.getById('user', decodedToken.id)
-                        .then(users => {
-                            res.locals.user = users[0];
-                            next();
-                        })
-                        .catch(err => {
-                            console.log('checkToken_err: ', err);
-                            res.locals.user = null;
-                            next();
-                        });
-
-                }
-                else {
-                    console.log('checkToken_err: ', err);
-                    res.locals.user = null;
-                    next();
-                }
-            })
+            try {
+                const decodedToken = await jwt.verify(token, 'jwt secret');
+                console.log(decodedToken);
+                const [user] = await workingDb.getById('user', decodedToken.id);
+                res.locals.user = user;
+                next();
+            } catch (err) {
+                console.log('checkToken_err: ', err);
+                res.locals.user = null;
+                next();
+            }
         }
         else {
             res.locals.user = null;
