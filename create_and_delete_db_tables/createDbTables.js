@@ -1,4 +1,4 @@
-const { db } = require('../services/workingDB');
+const { db } = require('../services/db');
 
 (async function () {
 

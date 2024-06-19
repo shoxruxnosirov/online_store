@@ -1,4 +1,4 @@
-const knex_connect = require('./knexfile');
+const knex_connect = require('../config/keys').knexConnect;
 const knex = require('knex');
 
 let db = knex(knex_connect);

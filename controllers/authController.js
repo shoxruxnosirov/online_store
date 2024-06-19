@@ -1,4 +1,4 @@
-const db = require('../services/workingDB');
+const db = require('../services/db');
 const { isEmail } = require('validator');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
