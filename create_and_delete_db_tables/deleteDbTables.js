@@ -12,10 +12,10 @@ const { db } = require('../services/db');
 
         await db.destroy();
 
-        console.log("users jadval o'chirildi!");
+        console.log("db jadvallar o'chirildi!");
 
     } catch (err) {
-        console.log('users jadvalni o\'chirishda xatolik: ', err);
+        console.log('db jadvallarni o\'chirishda xatolik: ', err);
     }
 
 })();
