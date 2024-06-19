@@ -41,11 +41,11 @@ const { db } = require('../services/db');
 
         await db.destroy();
 
-        console.log("users jadval yaratildi!");
+        console.log("db jadvallar yaratildi!");
 
 
     } catch (err) {
-        console.log('users jadvalni yaratishda xatolik: ', err);
+        console.log('db jadvallarni yaratishda xatolik: ', err);
     }
 
 })();
